@@ -11,7 +11,7 @@ public class Alurator {
         this.pacoteBase = pacoteBase;
     }
 
-    public Object executa(String url) {
+    public Object executa(String url) throws NoSuchMethodException {
         // TODO - processa a requisicao executando o metodo
         // da classe em questao
 
@@ -20,14 +20,22 @@ public class Alurator {
         Request request = new Request(url);
 
         String nomeControle = request.getNomeControle();
+        String nomeMetodo = request.getNomeMetodo();
 
-        Object instanciaControle = new Reflexao()
+//        Object instanciaControle = new Reflexao()
+//                .refleteClasse(pacoteBase + nomeControle)
+//                .criarInstancia()
+//                .getMetodo(nomeMetodo)
+//                .invoca();
+
+        Object retorno = new Reflexao()
                 .refleteClasse(pacoteBase + nomeControle)
-                .getContructorPadrao()
+                .criarInstancia()
+                .getMetodo(nomeMetodo)
                 .invoca();
 
-        System.out.println(instanciaControle);
+        System.out.println(retorno);
 
-        return null;
+        return retorno;
     }
 }

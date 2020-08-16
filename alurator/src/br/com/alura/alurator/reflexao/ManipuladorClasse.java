@@ -19,4 +19,9 @@ public class ManipuladorClasse {
             throw new RuntimeException(e);
         }
     }
+
+    public ManipuladorObjeto criarInstancia() {
+        Object instancia = getContructorPadrao().invoca();
+        return new ManipuladorObjeto(instancia);
+    }
 }
