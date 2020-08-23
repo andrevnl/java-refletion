@@ -1,14 +1,12 @@
-package br.com.alura.estoque.modelo;
+package br.com.alura.alurator.playground.modelo;
 
-import br.com.alura.alurator.conversor.anotacao.NomeTagXml;
+import br.com.alura.alurator.playground.anotacao.NomeTagXml;
 
 @NomeTagXml("produto")
-public class Produto {
-	@NomeTagXml("nome")
+public class Produto extends SuperProduto {
+	@NomeTagXml("n")
 	private String nome;
-	@NomeTagXml("valor")
 	private double valor;
-	@NomeTagXml("marca")
 	private String marca;
 	public Produto(String nome, double valor, String marca) {
 		this.nome = nome;
