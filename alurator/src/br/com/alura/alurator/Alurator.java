@@ -1,7 +1,9 @@
 package br.com.alura.alurator;
 
 import br.com.alura.alurator.conversor.ConversorXML;
+import br.com.alura.alurator.ioc.ContainerIoC;
 import br.com.alura.alurator.protocolo.Request;
+import br.com.alura.alurator.reflexao.ManipuladorObjeto;
 import br.com.alura.alurator.reflexao.Reflexao;
 
 import java.util.Map;
@@ -9,13 +11,15 @@ import java.util.Map;
 public class Alurator {
 
     private String pacoteBase;
+    private ContainerIoC containerIoC;
 
     public Alurator(String pacoteBase) {
         this.pacoteBase = pacoteBase;
+        this.containerIoC = new ContainerIoC();
     }
 
     public Object executa(String url) {
-        // TODO - processa a requisicao executando o metodo
+        // Processa a requisicao executando o metodo
         // da classe em questao
 
         // /produto/lista
@@ -29,9 +33,9 @@ public class Alurator {
 
         Map<String, Object> params = request.getQueryParams();
 
-        Object retorno = new Reflexao()
-                .refleteClasse(pacoteBase + nomeControle)
-                .criarInstancia()
+        Class<?> classeControle = new Reflexao().getClasse(pacoteBase + nomeControle);
+        Object instanciaControle = containerIoC.getInstancia(classeControle);
+        Object retorno = new ManipuladorObjeto(instanciaControle)
                 .getMetodo(nomeMetodo, params)
                 .comTratamentoDeExcecao((metodo, ex) -> {
                     System.out.println("Erro no método " + metodo.getName() + " da classe "
@@ -45,5 +49,9 @@ public class Alurator {
         retorno = new ConversorXML().converte(retorno);
 
         return retorno;
+    }
+
+    public <T, K extends T> void registra(Class<T> tipoFonte, Class<K> tipoDestino) {
+        containerIoC.registra(tipoFonte, tipoDestino);
     }
 }
